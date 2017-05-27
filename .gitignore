@@ -1,0 +1,5 @@
+private_vars
+scratchpad
+hosts
+contrib/digital_ocean.ini
+**/*.retry

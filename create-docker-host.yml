@@ -1,0 +1,45 @@
+---
+# This playbook configure hosts: initial configuration, installing docker on DO hosts
+
+- hosts: dockerhosts
+  name: create a droplet
+
+
+  roles:
+    - {role: droplet}
+
+# - name: configure the server
+#   hosts: all
+#   gather_facts: false
+#
+#   roles:
+#     - { role: known_hosts, tags: ["hostconfig", "known_hosts"] }
+#     - { role: python, tags: ["hostconfig","python"] }
+#     - { role: sshd, tags: ["hostconfig", "sshd"] }
+#     - { role: swap, tags: ["hostconfig", "swap"] }
+#     - { role: ufw,  tags: ["hostconfig", "ufw"] }
+#
+#
+# - name: set up docker daemon
+#   hosts: all
+#   gather_facts: false
+#   vars_files:
+#   - ../private_vars/ssh_connect.yml
+#   vars:
+#     - ansible_port: "{{custom_port}}"
+#
+#   roles:
+#     - { role: ssh_user_detect, tags: ["docker", "ssh_user_detect"] }
+#     - { role: dockerd, tags: ["docker"] }
+#
+# - name: remove root access
+#   hosts: all
+#   gather_facts: false
+#   vars_files:
+#   - ../private_vars/ssh_connect.yml
+#   vars:
+#     - ansible_port: "{{custom_port}}"
+#
+#   roles:
+#     - { role: ssh_user_detect, tags: ["deroot", "ssh_user_detect"] }
+#     - { role: deroot, tags: ["deroot"] }
