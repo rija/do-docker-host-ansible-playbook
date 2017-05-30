@@ -1,0 +1,19 @@
+---
+- name: check wether the user is root
+  local_action: command ssh -T -p {{do_host_ssh_port}} root@{{droplet_details.droplet.ip_address}} echo foo
+  register: user_is_root
+  ignore_errors: true
+
+- name: set ssh user to root
+  set_fact: do_host_user=root
+  when: user_is_root.rc == 0
+
+- name: check wether the user is custom
+  local_action: command ssh -T -p {{do_host_ssh_port}} {{custom_user}}@{{droplet_details.droplet.ip_address}} echo foo
+  register: user_is_custom
+  ignore_errors: true
+
+
+- name: set ssh user to custom user
+  set_fact: do_host_user={{custom_user}}
+  when: user_is_custom.rc == 0

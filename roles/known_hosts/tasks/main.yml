@@ -1,0 +1,14 @@
+- name: first remove the host from our known hosts list as we might have re-spun the hosts
+  local_action: lineinfile dest="{{local_known_hosts_file}}" state=absent regexp="{{droplet_details.droplet.ip_address}}"
+
+
+- name: retrieve public host key for the host
+  local_action: command ssh-keyscan -p {{do_host_ssh_port}} -t ecdsa {{droplet_details.droplet.ip_address}}
+  register: new_host_key
+
+
+- name: add the new host key for the host to our known hosts list
+  local_action: lineinfile dest="{{local_known_hosts_file}}" state=present regexp="{{droplet_details.droplet.ip_address}}" line="{{new_host_key.stdout}}"
+
+- debug: msg="local known hosts file is {{ local_known_hosts_file }}"
+- debug: msg="new host key is {{ new_host_key.stdout }}"

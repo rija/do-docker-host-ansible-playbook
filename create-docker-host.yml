@@ -8,12 +8,16 @@
   roles:
     - {role: droplet}
 
-# - name: configure the server
-#   hosts: all
-#   gather_facts: false
-#
-#   roles:
-#     - { role: known_hosts, tags: ["hostconfig", "known_hosts"] }
+- name: configure the server
+  hosts: dockerhosts
+  vars:
+      local_known_hosts_file: "~/.ssh/known_hosts"
+
+
+  roles:
+    - { role: ssh_port_detect, tags: ["hostconfig", "ssh_port_detect"] }
+    - { role: known_hosts, tags: ["hostconfig", "known_hosts"] }
+    - { role: ssh_user_detect, tags: ["hostconfig", "ssh_user_detect"] }
 #     - { role: python, tags: ["hostconfig","python"] }
 #     - { role: sshd, tags: ["hostconfig", "sshd"] }
 #     - { role: swap, tags: ["hostconfig", "swap"] }

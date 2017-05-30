@@ -1,0 +1,29 @@
+---
+
+- name: test default ssh port
+  local_action: wait_for port=22 timeout=5 host={{droplet_details.droplet.ip_address}}
+  register: default_ssh
+  ignore_errors: true
+  tags:
+    - ssh_port_detect.config.port.test_default
+
+- name: set do_host_ssh_port to default if default port is active
+  set_fact: do_host_ssh_port=22
+  when: default_ssh.elapsed < 5
+  tags:
+    - ssh_port_detect.config.port.set_default
+
+- name: test ssh on high port
+  local_action: wait_for port={{custom_ssh_port}} timeout=5 host={{droplet_details.droplet.ip_address}}
+  register: high_ssh
+  ignore_errors: true
+  tags:
+    - ssh_port_detect.config.port.test_high
+
+- name: set do_host_ssh_port to custom if custom port is active
+  set_fact: do_host_ssh_port={{custom_ssh_port}}
+  when: default_ssh.elapsed >= 5 and high_ssh.elapsed < 5
+  tags:
+    - ssh_port_detect.config.port.set_custom
+
+- debug: msg="ssh port that will be used for next ssh connection {{ do_host_ssh_port }}"
