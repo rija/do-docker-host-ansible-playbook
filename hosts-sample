@@ -1,0 +1,12 @@
+# sample hosts file: duplicate this file as 'hosts' and use the new copy to passed to ansible -i option
+[mydroplets]
+
+example.com  ansible_connection=local ansible_python_interpreter=python
+
+[do:children]
+mydroplets
+
+[do:vars]
+api_token=xxx
+custom_ssh_port=5333
+custom_user=foobar
