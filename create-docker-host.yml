@@ -6,18 +6,28 @@
 
 
   roles:
-    - {role: droplet}
+    - {role: droplet, tags: ["create_droplet"]}
 
-- name: configure the server
+- name: enabling ssh and check the server configuration
   hosts: dockerhosts
   vars:
       local_known_hosts_file: "~/.ssh/known_hosts"
 
 
   roles:
-    - { role: ssh_port_detect, tags: ["hostconfig", "ssh_port_detect"] }
-    - { role: known_hosts, tags: ["hostconfig", "known_hosts"] }
-    - { role: ssh_user_detect, tags: ["hostconfig", "ssh_user_detect"] }
+    - { role: ssh_port_detect, tags: ["hostcheck", "ssh_port_detect"] }
+    - { role: known_hosts, tags: ["hostcheck", "known_hosts"] }
+    - { role: ssh_user_detect, tags: ["hostcheck", "ssh_user_detect"] }
+
+- name : configure the server
+  hosts: new_droplet
+  vars:
+      ansible_user: "{{do_host_user}}"
+
+  roles:
+    - { role: ufw, tags: ["hostconfig", "ufw"] }
+
+
 #     - { role: python, tags: ["hostconfig","python"] }
 #     - { role: sshd, tags: ["hostconfig", "sshd"] }
 #     - { role: swap, tags: ["hostconfig", "swap"] }

@@ -1,0 +1,20 @@
+---
+- name: Open Docker daemon, HTTP(S), and SSHd ports in UFW
+  ufw: >
+    rule=allow
+    port={{ item }}
+    proto=tcp
+  with_items:
+    - 80     # Default HTTP port
+    - 443    # Default HTTPS port
+    - "{{do_host_ssh_port}}"   # Custom SSHd port
+    - 2375   # Docker daemon API port (TLS)
+    - 2376   # Docker daemon API port (TLS)
+  tags:
+    - ufw.ports.open
+- name: Turn on UFW
+  ufw: >
+    state=enabled
+  #notify: restart the host
+  tags:
+    - ufw.enable
