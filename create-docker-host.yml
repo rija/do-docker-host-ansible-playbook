@@ -19,13 +19,41 @@
     - { role: known_hosts, tags: ["hostcheck", "known_hosts"] }
     - { role: ssh_user_detect, tags: ["hostcheck", "ssh_user_detect"] }
 
-- name : configure the server
+- name: adding the droplet to a virtual hosts file fro host configuration
+  hosts: dockerhosts
+  tasks:
+  - add_host:
+     name: "{{ droplet_details.droplet.ip_address }}"
+     groups: new_droplet
+     do_host_user: "{{do_host_user}}"
+     do_host_ssh_port: "{{do_host_ssh_port}}"
+     public_key: "{{public_key}}"
+     custom_user: "{{custom_user}}"
+     custom_ssh_port: "{{custom_ssh_port}}"
+
+- name: Wait for system to become reachable
   hosts: new_droplet
+  gather_facts: no
   vars:
       ansible_user: "{{do_host_user}}"
+      ansible_port: "{{do_host_ssh_port}}"
+  tasks:
+  - name: wait_timeout
+    wait_for_connection:
+     delay: 60
+     timeout: 300
+
+
+- name : configure the server
+  hosts: new_droplet
+  become: true
+  vars:
+      ansible_user: "{{do_host_user}}"
+      ansible_port: "{{do_host_ssh_port}}"
 
   roles:
     - { role: ufw, tags: ["hostconfig", "ufw"] }
+    - { role: deroot, tags: ["hostconfig", "deroot"] }
 
 
 #     - { role: python, tags: ["hostconfig","python"] }

@@ -10,3 +10,4 @@ mydroplets
 api_token=xxx
 custom_ssh_port=5333
 custom_user=foobar
+public_key="actual rsa public key or url like https://github.com/username.keys"

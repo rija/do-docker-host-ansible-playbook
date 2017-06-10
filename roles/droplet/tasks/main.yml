@@ -16,3 +16,8 @@
   register: droplet_details
 
 - debug: msg="IP is {{ droplet_details.droplet.ip_address }}"
+
+# - wait_for:
+#     host: "{{ droplet_details.droplet.ip_address }}"
+#     port: 2375
+#     delay: 10

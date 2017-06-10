@@ -17,9 +17,3 @@
 - name: set ssh user to custom user
   set_fact: do_host_user={{custom_user}}
   when: user_is_custom.rc == 0
-
-- add_host:
-   name: "{{ droplet_details.droplet.ip_address }}"
-   groups: new_droplet
-   do_host_user: "{{do_host_user}}"
-   do_host_ssh_port: "{{do_host_ssh_port}}"
