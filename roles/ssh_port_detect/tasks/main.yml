@@ -9,7 +9,7 @@
 
 - name: set do_host_ssh_port to default if default port is active
   set_fact: do_host_ssh_port=22
-  when: default_ssh.elapsed < 20
+  when: default_ssh|succeeded
   tags:
     - ssh_port_detect.config.port.set_default
 
@@ -22,7 +22,7 @@
 
 - name: set do_host_ssh_port to custom if custom port is active
   set_fact: do_host_ssh_port={{custom_ssh_port}}
-  when: default_ssh.elapsed >= 20 and high_ssh.elapsed < 20
+  when: default_ssh|failed and high_ssh|succeeded
   tags:
     - ssh_port_detect.config.port.set_custom
 

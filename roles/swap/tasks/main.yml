@@ -1,0 +1,53 @@
+---
+- name: Check if swap file exists
+  stat:
+    path: /swapfile
+  register: swap_file_check
+  tags:
+    - swap.file.check
+
+- name: Creating swap file
+  command: fallocate -l 1G /swapfile creates=/swapfile
+  when: not swap_file_check.stat.exists
+  tags:
+    - swap.file.create
+
+- name: Configuring permissions for swap file
+  file: path=/swapfile
+        owner=root
+        group=root
+        mode=0600
+  tags:
+  - swap.file.permissions
+
+- name: Check swap file type
+  command: file /swapfile
+  register: swapfile
+  tags:
+    - swap.file.mkswap
+
+
+- name: Make swap file
+  command: mkswap /swapfile
+  when: not swap_file_check.stat.exists and swapfile.stdout.find('swap file') == -1
+  tags:
+    - swap.file.mkswap
+
+
+- name: Write swap entry in fstab
+  mount: name=none
+         src=/swapfile
+         fstype=swap
+         opts=sw
+         passno=0
+         dump=0
+         state=present
+  tags:
+    - swap.fstab
+
+
+- name: Mount swap
+  command: swapon /swapfile
+  when: not swap_file_check.stat.exists
+  tags:
+    - swap.file.swapon

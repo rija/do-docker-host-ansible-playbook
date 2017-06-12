@@ -3,6 +3,9 @@
 
 - hosts: dockerhosts
   name: create a droplet
+  tags:
+      - create_droplet
+      - essential
 
 
   roles:
@@ -10,6 +13,8 @@
 
 - name: enabling ssh and check the server configuration
   hosts: dockerhosts
+  tags:
+    - essential
   vars:
       local_known_hosts_file: "~/.ssh/known_hosts"
 
@@ -21,6 +26,8 @@
 
 - name: adding the droplet to a virtual hosts file fro host configuration
   hosts: dockerhosts
+  tags:
+    - essential
   tasks:
   - add_host:
      name: "{{ droplet_details.droplet.ip_address }}"
@@ -32,6 +39,8 @@
      custom_ssh_port: "{{custom_ssh_port}}"
 
 - name: Wait for system to become reachable
+  tags:
+      - wait_host_reachable
   hosts: new_droplet
   gather_facts: no
   vars:
@@ -45,43 +54,21 @@
 
 
 - name : configure the server
+  tags:
+      - configure_server
   hosts: new_droplet
   become: true
   vars:
       ansible_user: "{{do_host_user}}"
       ansible_port: "{{do_host_ssh_port}}"
+      do_host_ip: "{{inventory_hostname}}"
 
   roles:
     - { role: ufw, tags: ["hostconfig", "ufw"] }
     - { role: deroot, tags: ["hostconfig", "deroot"] }
+    - { role: ssh_user_detect, tags: ["hostconfig", "ssh_user_detect"] }
+    - { role: swap, tags: ["hostconfig", "swap"] }
 
 
 #     - { role: python, tags: ["hostconfig","python"] }
 #     - { role: sshd, tags: ["hostconfig", "sshd"] }
-#     - { role: swap, tags: ["hostconfig", "swap"] }
-#     - { role: ufw,  tags: ["hostconfig", "ufw"] }
-#
-#
-# - name: set up docker daemon
-#   hosts: all
-#   gather_facts: false
-#   vars_files:
-#   - ../private_vars/ssh_connect.yml
-#   vars:
-#     - ansible_port: "{{custom_port}}"
-#
-#   roles:
-#     - { role: ssh_user_detect, tags: ["docker", "ssh_user_detect"] }
-#     - { role: dockerd, tags: ["docker"] }
-#
-# - name: remove root access
-#   hosts: all
-#   gather_facts: false
-#   vars_files:
-#   - ../private_vars/ssh_connect.yml
-#   vars:
-#     - ansible_port: "{{custom_port}}"
-#
-#   roles:
-#     - { role: ssh_user_detect, tags: ["deroot", "ssh_user_detect"] }
-#     - { role: deroot, tags: ["deroot"] }

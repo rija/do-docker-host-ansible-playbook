@@ -17,6 +17,9 @@
 
 - debug: msg="IP is {{ droplet_details.droplet.ip_address }}"
 
+- name: set do_host_ip
+  set_fact: do_host_ip={{droplet_details.droplet.ip_address}}
+
 # - wait_for:
 #     host: "{{ droplet_details.droplet.ip_address }}"
 #     port: 2375
