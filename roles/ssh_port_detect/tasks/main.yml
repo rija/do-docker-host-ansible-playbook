@@ -26,4 +26,4 @@
   tags:
     - ssh_port_detect.config.port.set_custom
 
-- debug: msg="ssh port that will be used for next ssh connection {{ hostvars['permaculture.cinecinetique.com']['do_host_ssh_port'] }}"
+- debug: msg="ssh port that will be used for next ssh connection {{ hostvars[inventory_hostname]['do_host_ssh_port'] }}"

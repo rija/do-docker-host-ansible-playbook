@@ -3,15 +3,23 @@
 # If no droplet matches the id, a new droplet will be created and the droplet details (including the new id) are returned, changed = True.
 
 - digital_ocean:
+    command: ssh
     state: present
+    name: "{{key_name}}"
+    ssh_pub_key: "{{ lookup('file', pub_key_for_new_droplet) }}"
+    api_token: "{{api_token}}"
+  register: do_key
+
+- digital_ocean:
     command: droplet
+    state: present
     name: "{{ansible_host}}"
     unique_name: yes
     size_id: 512mb
     region_id: sgp1
     image_id: docker-16-04
     wait_timeout: 500
-    ssh_key_ids: 741976
+    ssh_key_ids: "{{ do_key.ssh_key.id }}"
     api_token: "{{api_token}}"
   register: droplet_details
 
