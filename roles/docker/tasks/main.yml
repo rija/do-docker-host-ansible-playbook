@@ -1,0 +1,20 @@
+---
+- name: Uninstall docker-py
+  pip:
+      name: docker-py
+      state: absent
+
+- name: Uninstall docker
+  pip:
+      name: docker
+      state: absent
+
+- name: Install docker
+  pip:
+      name: docker
+      state: forcereinstall
+
+- name: Install docker-compose
+  pip:
+      name: docker-compose
+      state: forcereinstall
