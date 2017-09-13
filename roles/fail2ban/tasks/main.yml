@@ -1,0 +1,8 @@
+- name: Install the package "fail2ban"
+  apt:
+    name: fail2ban
+    state: present
+
+- service:
+    name: fail2ban
+    state: started

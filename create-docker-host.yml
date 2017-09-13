@@ -69,6 +69,7 @@
     - { role: ssh_user_detect, tags: ["hostconfig", "ssh_user_detect"] }
     - { role: swap, tags: ["hostconfig", "swap"] }
     - { role: docker, tags: ["hostconfig", "docker"] }
+    - { role: fail2ban, tags: ["hostconfig", "fail2ban"] }
 
 
 #     - { role: python, tags: ["hostconfig","python"] }
