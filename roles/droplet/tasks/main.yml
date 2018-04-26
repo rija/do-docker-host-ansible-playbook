@@ -5,8 +5,8 @@
 - digital_ocean:
     command: ssh
     state: present
-    name: "{{key_name}}"
-    ssh_pub_key: "{{ lookup('file', pub_key_for_new_droplet) }}"
+    name: "ansible_created_key"
+    ssh_pub_key: "{{ lookup('file', public_key) }}"
     api_token: "{{api_token}}"
   register: do_key
 
@@ -16,8 +16,8 @@
     name: "{{ansible_host}}"
     unique_name: yes
     size_id: "{{size_id}}"
-    region_id: sgp1
-    image_id: docker-16-04
+    region_id: "{{region}}"
+    image_id: "{{image}}"
     wait_timeout: 500
     ssh_key_ids: "{{ do_key.ssh_key.id }}"
     api_token: "{{api_token}}"

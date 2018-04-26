@@ -1,13 +1,13 @@
 # sample hosts file: duplicate this file as 'hosts' and use the new copy to passed to ansible -i option
-[mydroplets]
+[dockerhosts]
 
-example.com  ansible_connection=local ansible_python_interpreter=python
+example.com size_id=s-1vcpu-1gb region=sgp1 image=docker-16-04 ansible_connection=local ansible_python_interpreter=python
 
 [do:children]
-mydroplets
+dockerhosts
 
 [do:vars]
 api_token=xxx
 custom_ssh_port=5333
 custom_user=foobar
-public_key="actual rsa public key or url like https://github.com/username.keys"
+public_key="~/.ssh/id_rsa.pub"
