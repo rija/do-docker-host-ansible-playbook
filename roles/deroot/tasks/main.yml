@@ -3,7 +3,7 @@
   user: name="{{custom_user}}" shell=/bin/bash groups=admin,docker,sudo append=yes
 
 - name: add new public key to authorized key for custom_user
-  authorized_key: user="{{custom_user}}" key="{{ public_key }}"
+  authorized_key: user="{{custom_user}}" key="{{ lookup('file', public_key) }}"
 
 
 - name: disable root login
