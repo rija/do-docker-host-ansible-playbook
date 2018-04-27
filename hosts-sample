@@ -1,7 +1,7 @@
 # sample hosts file: duplicate this file as 'hosts' and use the new copy to passed to ansible -i option
 [dockerhosts]
 
-example.com size_id=s-1vcpu-1gb region=sgp1 image=docker-16-04 ansible_connection=local ansible_python_interpreter=python
+www.example-website.com size_id=s-1vcpu-1gb region=sgp1 image=docker-16-04 ansible_connection=local ansible_python_interpreter="env python3"
 
 [do:children]
 dockerhosts

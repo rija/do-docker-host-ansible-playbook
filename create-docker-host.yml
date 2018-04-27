@@ -45,6 +45,7 @@
   gather_facts: no
   pre_tasks:
   - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  - raw: test -e /usr/bin/pip || (apt -y update && apt install -y python-pip)
   vars:
       ansible_user: "{{do_host_user}}"
       ansible_port: "{{do_host_ssh_port}}"
